@@ -3,37 +3,45 @@ var wins = 0;
 $("#wins").text(wins);
 var computerletter = "";
 $("#computerLetter").text(computerletter);
-var loses = 0;
-$("#loses").text(loses);
+var losses = 0;
+$("#losses").text(losses);
 var guessLeft = 10;
 $("#guessLeft").text(guessLeft);
 var guessSoFar = [];
-
 $(document).ready(function () {
     //initalizing the alphabet
-    var alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
-
+    var options = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
     //computer's first pick
-    var letter = alphabet[Math.floor(Math.random() * alphabet.length)];
-
+    var letter = options[Math.floor(Math.random() * options.length)];
     $(document).on("keyup", function (event) {
-        // console.log(alphabet.indexOf(event.key));
-        if (alphabet.indexOf(event.key) >= 0) {
-            if (guessSoFar.indexOf(event.key) == -1) {
-                guessSoFar.push(event.key);
+        var userGuess = event.key;
+        // console.log(options.indexOf(event.key));
+        if (options.indexOf(userGuess) >= 0) {
+            if (guessSoFar.indexOf(userGuess) == -1) {
+                guessSoFar.push(userGuess);
                 $("#guessSoFar").text(guessSoFar);
-
-                if ((event.key == letter)) {
+                if ((userGuess == letter)) {
                     wins++;
-                    //computer picks another letter
-                    letter = alphabet[Math.floor(Math.random() * alphabet.length)];
+                    guessSoFar = [];
+                    $("#guessSoFar").text(guessSoFar);
+                    $("#wins").text(wins);
+                    guessLeft = 10; //resests game
+                    $("#guessLeft").text(guessLeft);
+                    letter = options[Math.floor(Math.random() * options.length)]; //computer picks another letter
+                } else {
+                    guessLeft--;
+                    $("#guessLeft").text(guessLeft);
+                    if (guessLeft == 0) {
+                        guessSoFar = [];
+                        $("#guessSoFar").text(guessSoFar);
+                        losses++;
+                        $("#losses").text(losses);
+                        guessLeft = 10;
+                        $("#guessLeft").text(guessLeft);
+                        letter = options[Math.floor(Math.random() * options.length)];
+                    }
                 }
             }
-            $("#computerLetter").text(letter);
         }
-
     });
-
-
-
 });
